@@ -1,4 +1,8 @@
 class Solution {
+    // 为了避免从0开始index还是1开始, 在思考的时候我们计数两个数之间的间隙1到n
+    // 我们可以对两个数组进行分割, max(nums1Left)<min(nums2Right), max(nums2Left)<min(nums1Right)
+    // 满足上述两个条件我们就能够找到中位数(maxLeft or (maxLeft + minRight) / 2)
+    // binary search在长度短一些的数组, 并通过定位找到另一个数组的分割, 最后进行条件满足与否的判断
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int m = nums1.length;
         int n = nums2.length;
