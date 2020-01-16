@@ -1,5 +1,7 @@
 class Solution {
     // rotated array有两段, 要判断mid落在哪一段之后再进行和target的比较
+    // 判断mid在哪一段的比较中, nums[mid] > nums[left]在左段, nums[mid] < nums[right]在右段
+    // 如果用nums[mid] > nums[right]判断在左段的话, 当left, mid, right都在一段之后就会出错
     public int search(int[] nums, int target) {
         if (nums == null || nums.length == 0) return -1;
         
