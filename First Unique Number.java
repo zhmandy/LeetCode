@@ -12,23 +12,9 @@ class FirstUnique {
         set = new HashSet<>();
         unique = new HashSet<>();
         
-        for (int i = 0; i < nums.length; i++) {
-            if (set.contains(nums[i])) {
-                unique.remove(nums[i]);
-            } else {
-                set.add(nums[i]);
-                unique.add(nums[i]);
-                queue.add(nums[i]);
-            }
+        for (int num : nums) {
+            add(num);
         }
-        
-        // int size = queue.size();
-        // for (int i = 0; i < size; i++) {
-        //     int num = queue.remove();
-        //     if (unique.contains(num)) {
-        //         queue.add(num);
-        //     }
-        // }
     }
     
     public int showFirstUnique() {
@@ -39,11 +25,7 @@ class FirstUnique {
             queue.remove();
         }
         
-        if (queue.size() != 0) {
-            return queue.peek();
-        } else {
-            return -1;
-        }
+        return (queue.size() == 0) ? -1 : queue.peek();
     }
     
     public void add(int value) {
@@ -64,10 +46,3 @@ class FirstUnique {
         // }
     }
 }
-
-/**
- * Your FirstUnique object will be instantiated and called as such:
- * FirstUnique obj = new FirstUnique(nums);
- * int param_1 = obj.showFirstUnique();
- * obj.add(value);
- */
