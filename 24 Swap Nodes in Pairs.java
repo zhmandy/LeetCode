@@ -30,3 +30,23 @@ class Solution {
         return dummy.next;
     }
 }
+
+// recursion
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if (head == null) return null;
+        return swapHelper(head);
+    }
+    
+    private ListNode swapHelper(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode ret = swapHelper(head.next.next);
+        
+        ListNode tmp = head.next;
+        head.next = ret;
+        tmp.next = head;
+        head = tmp;
+        
+        return head;
+    }
+}
