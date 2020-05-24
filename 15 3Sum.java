@@ -2,7 +2,7 @@ class Solution {
     // two pointers
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> ret = new ArrayList<>();
-        if (nums == null || nums.length == 0) return ret;
+        if (nums == null || nums.length < 3) return ret;
         
         Arrays.sort(nums);
         for (int i = 0; i < nums.length; i++) {
