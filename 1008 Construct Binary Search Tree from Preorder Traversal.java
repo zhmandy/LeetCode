@@ -1,55 +1,76 @@
-// recursive
+// recursive: better one
 class Solution {
-    private int idx;
-    private int size;
-    private int[] preorder;
+    public TreeNode bstFromPreorder(int[] preorder) {
+        if (preorder == null || preorder.length == 0) return null;
+        return helper(preorder, 0, preorder.length - 1);
+    }
     
-    private TreeNode builder(int min, int max) {
-        if (idx == size) return null;
+    private TreeNode helper(int[] preorder, int start, int end) {
+        if (start > end) return null;
+        
+        TreeNode root = new TreeNode(preorder[start]);
+        int i;
+        for (i = start + 1; i <= end; i++) {
+            if (preorder[i] > preorder[start]) {
+                break;
+            }
+        }
+        
+        root.left = helper(preorder, start + 1, i - 1);
+        root.right = helper(preorder, i, end);
+        return root;
+    }
+}
+
+// recursive: should pay attention to that idx is global
+class Solution {
+    // idx should be global, and keep ++ rather than ++ a local var
+    private int idx;
+    
+    public TreeNode bstFromPreorder(int[] preorder) {
+        if (preorder == null || preorder.length == 0) return null;
+        idx = 0;
+        return helper(preorder, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+    
+    private TreeNode helper(int[] preorder, int min, int max) {
+        int index = idx;
+        if (idx == preorder.length) return null;
         
         int val = preorder[idx];
         if (val < min || val > max) return null;
         
         idx++;
         TreeNode root = new TreeNode(val);
-        root.left = builder(min, val);
-        root.right = builder(val, max);
+        root.left = helper(preorder, min, val);
+        root.right = helper(preorder, val, max);
         return root;
-    }
-    
-    public TreeNode bstFromPreorder(int[] preorder) {
-        this.idx = 0;
-        this.size = preorder.length;
-        this.preorder = preorder;
-        
-        return builder(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 }
 
 // iteration
 class Solution {
     public TreeNode bstFromPreorder(int[] preorder) {
+        if (preorder == null || preorder.length == 0) return null;
+        Deque<TreeNode> stack = new LinkedList<>();
         TreeNode root = new TreeNode(preorder[0]);
-        Deque<TreeNode> stack = new ArrayDeque<>();
         stack.push(root);
         
         for (int i = 1; i < preorder.length; i++) {
-            TreeNode node = stack.peek();
             TreeNode child = new TreeNode(preorder[i]);
+            TreeNode node = stack.peek();
             
-            // adjust the parent
-            while(!stack.isEmpty() && child.val > stack.peek().val) {
+            // find correct TreeNode to attach child
+            while (!stack.isEmpty() && child.val > stack.peek().val) {
                 node = stack.pop();
             }
             
             if (child.val < node.val) {
                 node.left = child;
-            } else {
+            } else if (child.val > node.val) {
                 node.right = child;
             }
             
-            // we assume each child is the parent of next subtree
-            // if it's not, adjust it in the while loop
             stack.push(child);
         }
         
