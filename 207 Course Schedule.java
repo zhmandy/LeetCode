@@ -29,6 +29,7 @@ class Solution {
         
         while (!queue.isEmpty()) {
             int current = queue.poll();
+            // contains no key or key is mapped to null
             if (graph.get(current) == null) {
                 continue;
             }
@@ -48,5 +49,64 @@ class Solution {
         }
         
         return true;
+    }
+}
+
+// dfs
+class Solution {
+    // two boolean arrays: visited & inpath
+    // recursion
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (numCourses < 0) return false;
+        if (prerequisites == null || prerequisites.length == 0) return true;
+        
+        HashMap<Integer, List<Integer>> graph = new HashMap<>();
+        boolean[] visited = new boolean[numCourses];
+        boolean[] inpath = new boolean[numCourses];
+        
+        for (int[] pair : prerequisites) {
+            if (graph.containsKey(pair[1])) {
+                graph.get(pair[1]).add(pair[0]);
+            } else {
+                List<Integer> list = new ArrayList<>();
+                list.add(pair[0]);
+                graph.put(pair[1], list);
+            }
+        }
+        
+        for (int i = 0; i < numCourses; i++) {
+            if (!dfs(graph, i, visited, inpath))
+                return false;
+        }
+        
+        return true;
+    }
+    
+    private boolean dfs(HashMap<Integer, List<Integer>> graph, int idx, boolean[] visited, boolean[] inpath) {
+        if (visited[idx]) {
+            return true;
+        }
+        
+        if (inpath[idx]) {
+            return false;
+        }
+        
+        if (graph.get(idx) == null) {
+            return true;
+        }
+        
+        boolean ret = true;
+        inpath[idx] = true;
+        for (int next : graph.get(idx)) {
+            if (!dfs(graph, next, visited, inpath)) {
+                ret = false;
+                break;
+            }
+        }
+        
+        visited[idx] = true;
+        inpath[idx] = false;
+        
+        return ret;
     }
 }
