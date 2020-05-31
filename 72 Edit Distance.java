@@ -1,30 +1,29 @@
 class Solution {
     public int minDistance(String word1, String word2) {
-        int m = word1.length();
-        int n = word2.length();
+        int len1 = word1.length();
+        int len2 = word2.length();
+        if (len1 == 0 && len2 == 0) return 0;
         
-        // state: dis[i][j]: distance between word1(0, i) and word2(0, j), inclusive
-        int[][] dis = new int[m+1][n+1];
+        int[][] dis = new int[len1 + 1][len2 + 2];
+        // match string with empty string, just delete all the chars
+        for (int i = 0; i <= len1; i++) dis[i][0] = i;
+        for (int j = 0; j <= len2; j++) dis[0][j] = j;
         
-        // init: [0][j], [i][0] are all 0
-        for (int i = 0; i <= m; i++) dis[i][0] = i;
-        for (int j = 0; j <= n; j++) dis[0][j] = j;
-        
-        // function: if [i] == [j] dis[i][j] = min(dis[i-1][j-1], dis[i-1][j]+1, dis[i][j-1]+1)
-        //           else dis[i][j] = min(dis[i-1][j-1]+1, dis[i-1][j]+1, dis[i][j-1]+1)
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                dis[i][j] = Integer.MAX_VALUE;
-                if (word1.charAt(i-1) == word2.charAt(j-1)) {
-                    dis[i][j] = Math.min(dis[i-1][j-1], dis[i-1][j]+1);
-                    dis[i][j] = Math.min(dis[i][j], dis[i][j-1]+1);
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                // if current char is the same, consider the smallest among the following:
+                // 1. dis[i-1][j-1], previous string is the same too
+                // 2. dis[i-1][j]+1/dis[i][j-1]+1, previous string: one delete to match the other
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dis[i][j] = Math.min(Math.min(dis[i - 1][j - 1], dis[i - 1][j] + 1), dis[i][j - 1] + 1);
+                // if current char is not the same, consider the smallest
+                // different case: dis[i-1][j-1] + 1, replace the current one to match
                 } else {
-                    dis[i][j] = Math.min(dis[i-1][j-1]+1, dis[i-1][j]+1);
-                    dis[i][j] = Math.min(dis[i][j], dis[i][j-1]+1);
+                    dis[i][j] = Math.min(Math.min(dis[i - 1][j - 1] + 1, dis[i - 1][j] + 1), dis[i][j - 1] + 1);
                 }
             }
         }
         
-        return dis[m][n];
+        return dis[len1][len2];
     }
 }
