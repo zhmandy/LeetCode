@@ -10,6 +10,7 @@ class Solution {
             nums.add(i);
         }
         
+        // compute factorial number
         int[] partitions = new int[n];
         partitions[0] = 1;
         for (int i = 1; i < n; i++) {
@@ -18,6 +19,8 @@ class Solution {
         
         k--;  // convert to index
         for (int i = 0; i < n; i++) {
+            // 第一次用K计算大的group number, 找到第一位从list里取出来
+            // 在小组里把剩下的再分小组, 按照同样的方法找到下一个数的index
             ret[i] = Character.forDigit(nums.remove(k / partitions[n-i-1]), 10);
             k = k % partitions[n-i-1];
         }
