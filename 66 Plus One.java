@@ -1,24 +1,20 @@
 class Solution {
-    public int[] plusOne(int[] digits) {
-        if (digits == null || digits.length == 0) return digits;
-        int carry = 1;
+    // same as 153
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1, mid;
         
-        for (int i = digits.length - 1; i >= 0; i--) {
-            digits[i] += carry;
-            carry = 0;
-            
-            if (digits[i] > 9) {
-                carry = 1;
-                digits[i] = 0;
+        while (left + 1 < right) {
+            mid = left + (right - left) / 2;
+            if (nums[mid] < nums[right]) {
+                right--;
+            } else if (nums[mid] > nums[right]) {
+                left++;
+            } else {
+                right--;
             }
         }
         
-        if (carry == 1) {
-            int[] ret = new int[digits.length + 1];
-            ret[0] = 1;
-            return ret;
-        } else {
-            return digits;
-        }
+        return Math.min(nums[left], nums[right]);
     }
 }
