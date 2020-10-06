@@ -1,20 +1,22 @@
 class Solution {
+    // two pointers
     public int findPairs(int[] nums, int k) {
-        Arrays.sort(nums);
+         Arrays.sort(nums);
+
+        int left = 0, right = 1;
         int counter = 0;
         
-        for (int i = 0; i < nums.length - 1; i++) {
-            if (i != 0 && nums[i] == nums[i - 1]) continue;
-            
-            int left = i + 1, right = nums.length - 1;
-            while (left <= right) {
-                int mid = left + (right - left) / 2;
-                if (nums[mid] - nums[i] == k) {
-                    counter++;
-                    break;
+        while (left < nums.length && right < nums.length) {
+            if (left == right || nums[right] - nums[left] < k) {
+                right++;
+            } else if (nums[right] - nums[left] > k) {
+                left++;
+            } else {
+                counter++;
+                left++;
+                while (left < nums.length && nums[left] == nums[left - 1]) {
+                    left++;
                 }
-                else if (nums[mid] - nums[i] > k) right--;
-                else left++;
             }
         }
         
