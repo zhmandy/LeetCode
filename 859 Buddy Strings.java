@@ -20,30 +20,15 @@ class Solution {
             return false;
         }
         
-        ArrayList<Integer>[] indexStorage = new ArrayList[26];
-        for (int i = 0; i < A.length(); i++) {
-            char current = A.charAt(i);
-            if (indexStorage[current - 'a'] == null) indexStorage[current - 'a'] = new ArrayList<>();
-            indexStorage[current - 'a'].add(i);
-        }
-        
-        char[] chs = A.toCharArray();
-        for (int i = 0; i < A.length(); i++) {
+        List<Integer> dif = new ArrayList<>();
+        for (int i = 0; i < A.length(); ++i) {
             if (A.charAt(i) != B.charAt(i)) {
-                char target = B.charAt(i);
-                if (indexStorage[target - 'a'] == null) return false;
-                else {
-                    ArrayList<Integer> idx = indexStorage[target - 'a'];
-                    for (int j = 0; j < idx.size(); j++) {
-                        int index = idx.get(j);
-                        swap(chs, i, index);
-                        if (B.equals(new String(chs))) return true;
-                        swap(chs, index, i);
-                    }
-                }
+                dif.add(i);
             }
         }
         
-        return false;
+        return dif.size() == 2 &&
+            A.charAt(dif.get(0)) == B.charAt(dif.get(1)) &&
+            A.charAt(dif.get(1)) == B.charAt(dif.get(0));
     }
 }
